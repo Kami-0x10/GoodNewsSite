@@ -27,6 +27,7 @@ h1 {
     font-size: 2.5rem;
 }
 
+/* ニュースリスト */
 .news-list {
     display: flex;
     flex-direction: column;
@@ -34,6 +35,7 @@ h1 {
     margin-top: 20px;
 }
 
+/* 各ニュースアイテム */
 .news-item {
     background-color: #fff;
     border: 1px solid #ddd;
@@ -63,4 +65,150 @@ h1 {
 
 .news-item a:hover {
     text-decoration: underline;
+}
+
+/* レスポンシブデザイン */
+
+/* iPhone 4s 対応 (320px以下) */
+@media screen and (max-width: 320px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    header {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .news-item {
+        width: 90%;
+        padding: 10px;
+    }
+
+    .news-item h2 {
+        font-size: 1.4rem;
+    }
+
+    .news-item p {
+        font-size: 1rem;
+    }
+
+    .news-item a {
+        font-size: 1.1rem;
+    }
+}
+
+/* 一般的なスマホ (360px - 480px) */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 16px;
+    }
+
+    .container {
+        width: 90%;
+    }
+
+    header {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .news-item {
+        width: 85%;
+        padding: 12px;
+    }
+
+    .news-item h2 {
+        font-size: 1.6rem;
+    }
+
+    .news-item p {
+        font-size: 1.1rem;
+    }
+
+    .news-item a {
+        font-size: 1.2rem;
+    }
+}
+
+/* タブレット (768px以上) */
+@media screen and (min-width: 768px) {
+    body {
+        font-size: 18px;
+    }
+
+    .container {
+        width: 80%;
+    }
+
+    header {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .news-item {
+        width: 80%;
+        padding: 15px;
+    }
+
+    .news-item h2 {
+        font-size: 1.8rem;
+    }
+
+    .news-item p {
+        font-size: 1.2rem;
+    }
+
+    .news-item a {
+        font-size: 1.2rem;
+    }
+}
+
+/* デスクトップ（1024px以上） */
+@media screen and (min-width: 1024px) {
+    body {
+        font-size: 18px;
+    }
+
+    .container {
+        width: 70%;
+    }
+
+    header {
+        padding: 30px;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    .news-item {
+        width: 70%;
+        padding: 20px;
+    }
+
+    .news-item h2 {
+        font-size: 2rem;
+    }
+
+    .news-item p {
+        font-size: 1.2rem;
+    }
+
+    .news-item a {
+        font-size: 1.3rem;
+    }
 }
