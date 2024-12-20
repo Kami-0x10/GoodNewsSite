@@ -108,8 +108,13 @@ function fetchRSS() {
             // フィルタリングされたニュースアイテムを最大100件に制限
             var limitedItems = positiveItems.slice(0, 100);
 
-            // フィルタリングされたニュースアイテムを表示
-            displayNews(limitedItems);
+            // ポジティブなニュースが1件もない場合、メッセージを表示
+            if (limitedItems.length === 0) {
+                document.getElementById('newsList').innerHTML = '<p>良いニュースはありませんでした。</p>';
+            } else {
+                // フィルタリングされたニュースアイテムを表示
+                displayNews(limitedItems);
+            }
         } else {
             console.error('RSSフィードの取得に失敗しました。');
             document.getElementById('newsList').innerHTML = '<p>ニュースの取得に失敗しました。</p>';
@@ -126,4 +131,3 @@ function fetchRSS() {
 window.onload = function() {
     loadNegativeWords();
 };
-
