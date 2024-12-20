@@ -42,6 +42,12 @@ async function fetchRSS() {
     try {
         // CORSプロキシを使ってRSSフィードを取得
         const response = await fetch(CORS_PROXY + RSS_URL);
+        
+        // レスポンスが成功したかチェック
+        if (!response.ok) {
+            throw new Error('RSSフィードの取得に失敗しました。');
+        }
+        
         const text = await response.text();
         
         // 取得したRSSをXML形式でパース
@@ -58,9 +64,15 @@ async function fetchRSS() {
         const positiveItems = items.filter(isPositiveNews);
 
         // フィルタリングされたニュースアイテムを表示
-        displayNews(positiveItems);
+        if (positiveItems.length > 0) {
+            displayNews(positiveItems);
+        } else {
+            console.log('ポジティブなニュースは見つかりませんでした。');
+            document.getElementById('newsList').innerHTML = '<p>ポジティブなニュースは現在ありません。</p>';
+        }
     } catch (error) {
-        console.error('RSSフィードの取得に失敗しました:', error);
+        console.error('エラー:', error);
+        document.getElementById('newsList').innerHTML = '<p>ニュースの取得に失敗しました。</p>';
     }
 }
 
