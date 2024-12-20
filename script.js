@@ -7,14 +7,7 @@ var CORS_PROXY = 'https://cors-0x10.online/';
 // ネガティブワードリストを格納する変数
 var negativeKeywords = [];
 
-// 五十音一文字（あ、い、う...）を除外する関数
-function isValidWord(word) {
-    // 五十音一文字を除外（あ、い、う、え、お、など）
-    const invalidChars = /^[あ-ん]$/;
-    return !invalidChars.test(word);
-}
-
-// 外部のネガティブワード.txtファイルを読み込む関数（iOS6対応版）
+// 外部のネガティブワード.txtファイルを読み込む関数
 function loadNegativeWords() {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://github.com/Kami-0x10/GoodNewsSite/blob/main/blacklists.txt', true);  // ネガティブワードのtxtファイルのURLを指定
@@ -22,9 +15,9 @@ function loadNegativeWords() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             var text = xhr.responseText;
-            var words = text.split('\n');
+            var words = text.split('\n');  // 改行で区切って単語を配列に格納
             negativeKeywords = words.filter(function(word) {
-                return word.trim() && isValidWord(word.trim());
+                return word.trim();  // 空白の単語を取り除く
             });
             console.log("ネガティブワードが読み込まれました:", negativeKeywords);
             fetchRSS();  // ネガティブワードを読み込んだ後にRSSを取得
@@ -133,3 +126,4 @@ function fetchRSS() {
 window.onload = function() {
     loadNegativeWords();
 };
+
