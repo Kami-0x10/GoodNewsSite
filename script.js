@@ -4,28 +4,37 @@ const RSS_URL = 'https://news.yahoo.co.jp/rss/categories/domestic.xml'; // 国�
 // CORSプロキシURL
 const CORS_PROXY = 'https://cors-0x10.online/';
 
-// 明るいニュースに関連するキーワード
-const positiveKeywords = ['希望', '笑顔', 'ポジティブ', '感謝', '幸せ', '楽しい', '支援', '成長', '成功'];
+// より細かく具体的な明るいニュースに関連するキーワード
+const positiveKeywords = [
+    '希望', '笑顔', 'ポジティブ', '感謝', '幸せ', '楽しい', '支援', '成長', '成功', 
+    '感動', '前向き', '協力', '豊か', '素晴らしい', '輝く', '愛', '励まし', '良いニュース', 
+    '変化', '発展', '達成', '奇跡', '未来', '挑戦', '喜び', '明るい', '幸運', '団結', '感謝'
+];
 
 // ニュースを表示する関数
 function displayNews(items) {
     const newsList = document.getElementById('newsList');
     newsList.innerHTML = ''; // 既存のニュースをクリア
 
-    items.forEach(item => {
-        const newsItem = document.createElement('div');
-        newsItem.classList.add('news-item');
-        
-        const newsTitle = document.createElement('h2');
-        newsTitle.textContent = item.title;
-        newsItem.appendChild(newsTitle);
+    if (items.length > 0) {
+        items.forEach(item => {
+            const newsItem = document.createElement('div');
+            newsItem.classList.add('news-item');
+            
+            const newsTitle = document.createElement('h2');
+            newsTitle.textContent = item.title;
+            newsItem.appendChild(newsTitle);
 
-        const newsDescription = document.createElement('p');
-        newsDescription.textContent = item.description;
-        newsItem.appendChild(newsDescription);
+            const newsDescription = document.createElement('p');
+            newsDescription.textContent = item.description;
+            newsItem.appendChild(newsDescription);
 
-        newsList.appendChild(newsItem);
-    });
+            newsList.appendChild(newsItem);
+        });
+    } else {
+        // ポジティブなニュースが見つからなかった場合
+        newsList.innerHTML = '<p>良いニュースはありませんでした。</p>';
+    }
 }
 
 // ニュースアイテムがポジティブかどうかをチェックする関数
@@ -64,12 +73,7 @@ async function fetchRSS() {
         const positiveItems = items.filter(isPositiveNews);
 
         // フィルタリングされたニュースアイテムを表示
-        if (positiveItems.length > 0) {
-            displayNews(positiveItems);
-        } else {
-            console.log('ポジティブなニュースは見つかりませんでした。');
-            document.getElementById('newsList').innerHTML = '<p>ポジティブなニュースは現在ありません。</p>';
-        }
+        displayNews(positiveItems);
     } catch (error) {
         console.error('エラー:', error);
         document.getElementById('newsList').innerHTML = '<p>ニュースの取得に失敗しました。</p>';
