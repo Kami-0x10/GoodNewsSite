@@ -1,4 +1,4 @@
-/* ベーススタイル */
+/* 全体スタイル */
 * {
     margin: 0;
     padding: 0;
@@ -53,4 +53,14 @@ h1 {
 .news-item p {
     font-size: 1.2rem;
     color: #555;
+}
+
+.news-item a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.news-item a:hover {
+    text-decoration: underline;
 }
