@@ -29,10 +29,9 @@ h1 {
 
 /* ニュースリスト */
 .news-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     margin-top: 20px;
+    /* iOS 6向けに中央揃え */
+    text-align: center;
 }
 
 /* 各ニュースアイテム */
@@ -40,7 +39,7 @@ h1 {
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 15px;
-    margin: 10px;
+    margin: 10px auto;  /* 中央揃えのため、marginをautoに設定 */
     width: 80%;
     max-width: 600px;
     border-radius: 8px;
