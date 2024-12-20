@@ -4,22 +4,41 @@ var RSS_URL = 'https://news.yahoo.co.jp/rss/categories/domestic.xml'; // 国内�
 // CORSプロキシURL
 var CORS_PROXY = 'https://cors-0x10.online/';
 
-// より厳密なポジティブなニュースに関連するキーワード
-var positiveKeywords = [
-    '希望', '笑顔', 'ポジティブ', '感謝', '幸せ', '楽しい', '支援', '成長', '成功', 
-    '感動', '前向き', '協力', '豊か', '素晴らしい', '輝く', '愛', '励まし', '良いニュース', 
-    '変化', '発展', '達成', '奇跡', '未来', '挑戦', '喜び', '明るい', '幸運', '団結', '感謝',
-    '前進', '明るい未来', '愛情', '成果', '温かい', '笑顔が溢れる', '活気', '希望に満ちた'
-];
+// ネガティブワードリストを格納する変数
+var negativeKeywords = [];
 
-// 否定的なキーワード（新たに追加したものを含む）
-var negativeKeywords = [
-    '悲しい', '不幸', '困難', '危機', '失敗', '問題', '災害', '衝撃', '恐れ', '暗い', '不安', 
-    '痛み', '憂鬱', '苦しみ', '落ち込む', '悩み', '絶望', '殺人', '裁判', 'ケガ', '事故', 
-    '傷害', '暴力', '戦争', '破壊', '犯罪', '暴動', '自殺', '傷', '強盗', '過失', '暴力行為', 
-    '不正', '告発', '災難', '事故発生', '交通事故', '暴力事件', '殺人事件', '事件','速報','地震','死去','崩御',
-    '逝去','急逝','死ぬ','津波','大雨','雪崩','謝罪','辞職','暴行','逮捕','差別','書類送検','死亡'
-];
+// 五十音一文字（あ、い、う...）を除外する関数
+function isValidWord(word) {
+    // 五十音一文字を除外（あ、い、う、え、お、など）
+    const invalidChars = /^[あ-ん]$/;
+    return !invalidChars.test(word);
+}
+
+// 外部のネガティブワード.txtファイルを読み込む関数（iOS6対応版）
+function loadNegativeWords() {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', './blacklists.txt', true);  // ネガティブワードのtxtファイルのURLを指定
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var text = xhr.responseText;
+            var words = text.split('\n');
+            negativeKeywords = words.filter(function(word) {
+                return word.trim() && isValidWord(word.trim());
+            });
+            console.log("ネガティブワードが読み込まれました:", negativeKeywords);
+            fetchRSS();  // ネガティブワードを読み込んだ後にRSSを取得
+        } else {
+            console.error('ネガティブワードの読み込みに失敗しました:', xhr.status);
+        }
+    };
+
+    xhr.onerror = function() {
+        console.error('ネットワークエラーが発生しました。');
+    };
+
+    xhr.send();
+}
 
 // ニュースを表示する関数
 function displayNews(items) {
@@ -61,21 +80,12 @@ function containsNegativeKeyword(text) {
 
 // ニュースアイテムがポジティブかどうかをチェックする関数
 function isPositiveNews(item) {
-    // タイトルと説明にポジティブなキーワードが含まれているかをチェック
-    var titleContainsPositive = positiveKeywords.some(function(keyword) {
-        return item.title.indexOf(keyword) !== -1;
-    });
-    var descriptionContainsPositive = positiveKeywords.some(function(keyword) {
-        return item.description.indexOf(keyword) !== -1;
-    });
-    
     // 否定的なキーワードがタイトルや説明に含まれていれば除外
     var titleContainsNegative = containsNegativeKeyword(item.title);
     var descriptionContainsNegative = containsNegativeKeyword(item.description);
 
-    // ポジティブなニュースで、否定的なキーワードが含まれていない場合のみ
-    return (titleContainsPositive || descriptionContainsPositive) && 
-           !(titleContainsNegative || descriptionContainsNegative);
+    // ネガティブなキーワードが含まれていなければポジティブニュースとして扱う
+    return !(titleContainsNegative || descriptionContainsNegative);
 }
 
 // RSSを取得し、XMLをパースしてニュースアイテムを表示
@@ -119,7 +129,7 @@ function fetchRSS() {
     xhr.send();
 }
 
-// ページが読み込まれたときにRSSを取得
+// ページが読み込まれたときにネガティブワードをロードしてRSSを取得
 window.onload = function() {
-    fetchRSS();
+    loadNegativeWords();
 };
