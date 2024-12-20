@@ -12,10 +12,12 @@ const positiveKeywords = [
     '前進', '明るい未来', '愛情', '成果', '温かい', '笑顔が溢れる', '活気', '希望に満ちた'
 ];
 
-// 否定的なキーワード
+// 否定的なキーワード（新たに追加したものを含む）
 const negativeKeywords = [
     '悲しい', '不幸', '困難', '危機', '失敗', '問題', '災害', '衝撃', '恐れ', '暗い', '不安', 
-    '痛み', '憂鬱', '苦しみ', '落ち込む', '悩み', '絶望'
+    '痛み', '憂鬱', '苦しみ', '落ち込む', '悩み', '絶望', '殺人', '裁判', 'ケガ', '事故', 
+    '傷害', '暴力', '戦争', '破壊', '犯罪', '暴動', '自殺', '傷', '強盗', '過失', '暴力行為', 
+    '不正', '告発', '災難', '事故発生', '交通事故'
 ];
 
 // ニュースを表示する関数
@@ -77,29 +79,4 @@ async function fetchRSS() {
         
         const text = await response.text();
         
-        // 取得したRSSをXML形式でパース
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, "text/xml");
-
-        // RSSフィードからアイテムを取得
-        const items = Array.from(xmlDoc.querySelectorAll('item')).map(item => ({
-            title: item.querySelector('title').textContent,
-            description: item.querySelector('description').textContent,
-            link: item.querySelector('link').textContent
-        }));
-
-        // ポジティブなニュースのみをフィルタリング
-        const positiveItems = items.filter(isPositiveNews);
-
-        // フィルタリングされたニュースアイテムを表示
-        displayNews(positiveItems);
-    } catch (error) {
-        console.error('エラー:', error);
-        document.getElementById('newsList').innerHTML = '<p>ニュースの取得に失敗しました。</p>';
-    }
-}
-
-// ページが読み込まれたときにRSSを取得
-window.onload = function() {
-    fetchRSS();
-};
+        // 取得し
