@@ -1,10 +1,10 @@
-// Yahoo JapanニュースRSSフィードのURL（国内ニュースの例）
+// Yahoo JapanニュースRSSフィードのURL（国内ニュース）
 const RSS_URL = 'https://news.yahoo.co.jp/rss/categories/domestic.xml'; // 国内ニュースのRSS
 
 // CORSプロキシURL
 const CORS_PROXY = 'https://cors-0x10.online/';
 
-// より細かく具体的な明るいニュースに関連するキーワード
+// ポジティブなニュースに関連するキーワード
 const positiveKeywords = [
     '希望', '笑顔', 'ポジティブ', '感謝', '幸せ', '楽しい', '支援', '成長', '成功', 
     '感動', '前向き', '協力', '豊か', '素晴らしい', '輝く', '愛', '励まし', '良いニュース', 
@@ -28,6 +28,11 @@ function displayNews(items) {
             const newsDescription = document.createElement('p');
             newsDescription.textContent = item.description;
             newsItem.appendChild(newsDescription);
+
+            const newsLink = document.createElement('a');
+            newsLink.href = item.link;
+            newsLink.textContent = '続きを読む';
+            newsItem.appendChild(newsLink);
 
             newsList.appendChild(newsItem);
         });
@@ -66,7 +71,8 @@ async function fetchRSS() {
         // RSSフィードからアイテムを取得
         const items = Array.from(xmlDoc.querySelectorAll('item')).map(item => ({
             title: item.querySelector('title').textContent,
-            description: item.querySelector('description').textContent
+            description: item.querySelector('description').textContent,
+            link: item.querySelector('link').textContent
         }));
 
         // ポジティブなニュースのみをフィルタリング
